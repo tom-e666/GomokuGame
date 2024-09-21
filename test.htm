@@ -1,0 +1,40 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        .show-button{
+            background-color: yellow;
+            display: block;
+            width: 10vh;
+            justify-content: center;
+        }
+        .dropdown{
+            display: block;
+            position: absolute;
+        }
+        .dropdown-content{
+            display: none;
+            position: absolute;
+            background-color: cyan;
+       }
+        .dropdown-content a{
+            display: block;
+        }
+        .dropdown:hover .dropdown-content{
+            display: block;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="dropdown">
+        <div class="show-button">Show</div>
+        <div class="dropdown-content">
+            <a href="#">A</a>
+            <a href="#">A</a>
+            <a href="#">A</a>
+        </div>
+
+    </div>
+</body>
+</html>
