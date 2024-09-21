@@ -3,7 +3,7 @@
 </script>
 
 <template>
-<div class="t">
+<div class="banner">
   <img src="/src/assets/1.svg" width="100px" height="100px" alt="char" class="singleChar">
   <img src="/src/assets/2.svg" width="100px" height="100px" alt="char" class="singleChar">
   <img src="/src/assets/3.svg" width="100px" height="100px" alt="char" class="singleChar">
@@ -13,7 +13,7 @@
 </div>
 </template>
 <style scoped>
-.t{
+.banner{
   display: flex;
   justify-content: center;
   flex-direction: row;

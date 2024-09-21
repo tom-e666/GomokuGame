@@ -2,7 +2,7 @@
 <script setup>
 
 
-import {ref} from "vue";
+import {computed, ref} from "vue";
 
 
 const  BoardWidth=ref(15)
@@ -29,20 +29,25 @@ function handleCellClick(y,x)
   logicBoard[y][x].value=CurrentPlayer.value;
   CurrentPlayer.value=(CurrentPlayer.value==='X'?'O':'X')
 }
+const LeaderBoardData=ref([
+])
+const LeaderBoardDataAmount=computed(()=>{
+  return LeaderBoardData.value.length
+})
+
 </script>
-<template class="master">
+<template>
+  <div class="master">
   <div class="LeaderBoard">
+    <h3 :style="{display:'flex',justifyContent:'center'}">LEADER BOARD</h3>
+    {{LeaderBoardDataAmount===0?'No record':LeaderBoardDataAmount}}
+    <li :style="{display:'flex', justifyContent:'center'}" v-if="LeaderBoardData.length>0" v-for="(name,index) in LeaderBoardData" :key="index">
+      Game {{index}}: <br> name
+    </li>
 
   </div>
   <div class="GameBoard">
-    <div   v-for="y in logicBoard.value.length" :key="y">
-      <div  v-for="x in logicBoard.value[y]" :key="x">
-        <div class="game-grid-item" @click="handleCellClick(y,x)">
-<!--          {{logicBoard.value[y][x]!==''?logicBoard.value[y][x]:''}}-->
-          {{logicBoard.value[y][x]}}
-          </div>
-        </div>
-    </div>
+
   </div>
   <div class="Setting">
     <div class="grid-item"> Width:  <input type="number" v-model="BoardWidth" min="3" max="25"/></div>
@@ -53,36 +58,48 @@ function handleCellClick(y,x)
         <option>O</option>
       </select></div>
     <div class="grid-item"><button :disabled="isPlaying" @click="resetGame">Reset</button></div>
-
+  </div>
   </div>
 </template>
 <style scoped>
 .master{
   display: flex;
   flex-direction: row;
-  padding: 20px;
-  border-radius: 10px;
-  background-color: white;
   min-height: 500px;
 }
 .LeaderBoard{
+  display:block;
   width: 20%;
-
+  border-radius: 20px;
+  margin: 20px;
+  background-color: yellow;
 }
 .GameBoard{
   width: 50%;
-  display:grid;
-  background-color: #f2f2f2;
+  min-height: 300px;
+  display:flex;
+  background-color: yellow;
   padding: 10px;
+  border-radius: 20px;
+  margin: 20px;
+
 }
+.GameBoardRow{
+  flex-direction: row;
+}
+.GameBoardCell{
+  background-color: yellow;
+  border-radius: 10px;
+}
+
 .Setting{
   width: 30%;
   display: grid;
   column-gap:20px;
   row-gap:20px;
+  border-radius: 20px;
+  margin: 20px;
+  background-color: yellow;
 }
-.grid-item{
-  background-color: cyan;
-  border: 5px;
-}
+
 </style>
