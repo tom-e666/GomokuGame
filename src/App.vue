@@ -10,9 +10,11 @@ import GomokuGame from "@/components/GomokuGame.vue";
 </template>
 <style>
 .container{
-  display: flex;
+  display: block;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  min-width: 1000px;
 }
 </style>

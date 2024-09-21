@@ -2,7 +2,7 @@
 <script setup>
 
 
-import {ref} from "vue";
+import {computed, ref} from "vue";
 
 
 const  BoardWidth=ref(15)
@@ -11,13 +11,19 @@ const isPlaying=ref(false);
 
 const FirstPlayer=ref('X')
 const CurrentPlayer=ref(FirstPlayer.value)
-const logicBoard=ref([BoardHeight].map(()=>{[BoardWidth].fill('')}))
+const BoardCellValue='X'|'O'|null
+const temRow=Array(BoardWidth).fill(null)
+const logicBoard= Array(BoardHeight).fill(temRow)
 function resetGame(){
   if(isPlaying.value){
     alert("Current Game are playing, please finish or dismiss!")
     return
   }
-  logicBoard.value=[BoardHeight].map(()=>{[BoardWidth].fill('')})
+  logicBoard.value.forEach((col)=>{
+    col.forEach((row)=>{
+      logicBoard.value[col][row]=null;
+    })
+  })
   CurrentPlayer.value=FirstPlayer.value
 }
 function handleCellClick(y,x)
@@ -29,21 +35,31 @@ function handleCellClick(y,x)
   logicBoard[y][x].value=CurrentPlayer.value;
   CurrentPlayer.value=(CurrentPlayer.value==='X'?'O':'X')
 }
+const LeaderBoardData=ref([
+])
+const LeaderBoardDataAmount=computed(()=>{
+  return LeaderBoardData.value.length
+})
+console.log(logicBoard.value)
 </script>
-<template class="master">
+<template>
+  <div class="master">
   <div class="LeaderBoard">
+    <h3 :style="{display:'flex',justifyContent:'center'}">LEADER BOARD</h3>
+    <div v-if="LeaderBoardDataAmount===0" :style="{display:'flex', justifyContent:'center', alignItems:'center', height:'100%'}">No Record</div>
+    <li v-else :style="{display:'flex', justifyContent:'center'}" v-for="(name,index) in LeaderBoardData" :key="index">
+      Game {{index}}: <br> name
+    </li>
 
   </div>
   <div class="GameBoard">
-    <div   v-for="y in logicBoard.value.length" :key="y">
-      <div  v-for="x in logicBoard.value[y]" :key="x">
-        <div class="game-grid-item" @click="handleCellClick(y,x)">
-<!--          {{logicBoard.value[y][x]!==''?logicBoard.value[y][x]:''}}-->
-          {{logicBoard.value[y][x]}}
-          </div>
-        </div>
+    <div v-for="y in logicBoard" :key="y">
+      <div v-for="x in logicBoard[y]" :key="x">
+1
     </div>
   </div>
+  </div>
+
   <div class="Setting">
     <div class="grid-item"> Width:  <input type="number" v-model="BoardWidth" min="3" max="25"/></div>
     <div class="grid-item"> Height:  <input type="number" v-model="BoardHeight" min="3" max="25"/></div>
@@ -53,36 +69,52 @@ function handleCellClick(y,x)
         <option>O</option>
       </select></div>
     <div class="grid-item"><button :disabled="isPlaying" @click="resetGame">Reset</button></div>
-
+  </div>
   </div>
 </template>
 <style scoped>
 .master{
   display: flex;
   flex-direction: row;
-  padding: 20px;
-  border-radius: 10px;
-  background-color: white;
   min-height: 500px;
 }
 .LeaderBoard{
+  display:block;
   width: 20%;
-
+  border-radius: 20px;
+  margin: 20px;
+  background-color: gray;
 }
 .GameBoard{
   width: 50%;
-  display:grid;
-  background-color: #f2f2f2;
+  min-height: 300px;
+  display:flex;
+  flex-direction: row;
+  background-color: gray;
   padding: 10px;
+  border-radius: 20px;
+  margin: 20px;
+
 }
+.GameBoardRow{
+  flex-direction: row;
+}
+.GameBoardCell{
+  min-width: 10px;
+  min-height:10px;
+  border-radius:10px;
+  margin: 10px;
+  background-color: white;
+}
+
 .Setting{
   width: 30%;
   display: grid;
   column-gap:20px;
   row-gap:20px;
+  border-radius: 20px;
+  margin: 20px;
+  background-color: gray;
 }
-.grid-item{
-  background-color: cyan;
-  border: 5px;
-}
+
 </style>
