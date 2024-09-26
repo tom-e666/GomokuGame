@@ -1,30 +1,20 @@
 
 <script setup>
 
-
-import {computed, ref} from "vue";
-
-
-const  BoardWidth=ref(15)
-const BoardHeight=ref(15)
+import {computed, ref, watch} from "vue";
+const  BoardWidth=ref(4)
+const BoardHeight=ref(5)
 const isPlaying=ref(false);
-
 const FirstPlayer=ref('X')
 const CurrentPlayer=ref(FirstPlayer.value)
-const BoardCellValue='X'|'O'|null
-const temRow=Array(BoardWidth).fill(null)
-const logicBoard= Array(BoardHeight).fill(temRow)
+const logicBoard=ref(Array(BoardHeight.value).fill(null).map(()=>(Array(BoardWidth.value).fill(null))))
+watch(logicBoard,()=>{console.log(logicBoard.value)})
 function resetGame(){
   if(isPlaying.value){
     alert("Current Game are playing, please finish or dismiss!")
     return
   }
-  logicBoard.value.forEach((col)=>{
-    col.forEach((row)=>{
-      logicBoard.value[col][row]=null;
-    })
-  })
-  CurrentPlayer.value=FirstPlayer.value
+  logicBoard.value=Array(BoardHeight.value).fill(null).map(()=>(Array(BoardWidth.value).fill(null)))
 }
 function handleCellClick(y,x)
 {
@@ -40,25 +30,26 @@ const LeaderBoardData=ref([
 const LeaderBoardDataAmount=computed(()=>{
   return LeaderBoardData.value.length
 })
-console.log(logicBoard.value)
 </script>
 <template>
   <div class="master">
   <div class="LeaderBoard">
     <h3 :style="{display:'flex',justifyContent:'center'}">LEADER BOARD</h3>
     <div v-if="LeaderBoardDataAmount===0" :style="{display:'flex', justifyContent:'center', alignItems:'center', height:'100%'}">No Record</div>
-    <li v-else :style="{display:'flex', justifyContent:'center'}" v-for="(name,index) in LeaderBoardData" :key="index">
-      Game {{index}}: <br> name
-    </li>
+    <div v-else :style="{display:'flex', justifyContent:'center'}" v-for="(name,index) in LeaderBoardData" :key="index">
+      Game {{index}}: <br> {{name}}
+    </div>
 
   </div>
   <div class="GameBoard">
-    <div v-for="y in logicBoard" :key="y">
-      <div v-for="x in logicBoard[y]" :key="x">
-1
+    <div v-for="(row,y) in logicBoard" :key="y" class="GameBoardRow">
+      <div v-for="(cell,x) in logicBoard[y]" :key="x"
+           class="GameBoardCell"
+           @click="handleCellClick(y,x)"
+      >
+      </div>
     </div>
-  </div>
-  </div>
+    </div>
 
   <div class="Setting">
     <div class="grid-item"> Width:  <input type="number" v-model="BoardWidth" min="3" max="25"/></div>
@@ -89,21 +80,23 @@ console.log(logicBoard.value)
   width: 50%;
   min-height: 300px;
   display:flex;
-  flex-direction: row;
+  flex-direction: column;
   background-color: gray;
   padding: 10px;
   border-radius: 20px;
   margin: 20px;
-
+  justify-content: center;
+  align-items: center;
 }
 .GameBoardRow{
+  display: flex;
   flex-direction: row;
 }
 .GameBoardCell{
-  min-width: 10px;
-  min-height:10px;
+  min-width: 30px;
+  min-height:30px;
   border-radius:10px;
-  margin: 10px;
+  margin: 1px;
   background-color: white;
 }
 
