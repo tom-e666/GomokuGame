@@ -8,6 +8,7 @@ const isPlaying=ref(false);
 const FirstPlayer=ref('X')
 const CurrentPlayer=ref(FirstPlayer.value)
 const logicBoard=ref(Array(BoardHeight.value).fill(null).map(()=>(Array(BoardWidth.value).fill(null))))
+const winCondition=ref(3)
 watch(logicBoard,()=>{console.log(logicBoard.value)})
 function resetGame(){
   if(isPlaying.value){
@@ -18,12 +19,27 @@ function resetGame(){
 }
 function handleCellClick(y,x)
 {
-  if(logicBoard[y][x].value!=='')
+  if(logicBoard.value[y][x]!==null)
   {
     return
   }
-  logicBoard[y][x].value=CurrentPlayer.value;
+  logicBoard.value[y][x]=CurrentPlayer.value;
+  handleGameLogic(y,x);
   CurrentPlayer.value=(CurrentPlayer.value==='X'?'O':'X')
+}
+function handleGameLogic(y,x){
+  //determine whether the player have won
+  const yFix=y
+  const xFix=x
+  const dy=[0,-1,-1,-1]
+  const dx=[1, 1,0,-1]
+  for(let i=0;i<4;++i)
+  {
+    const count=1;
+
+  }
+
+
 }
 const LeaderBoardData=ref([
 ])
@@ -46,7 +62,8 @@ const LeaderBoardDataAmount=computed(()=>{
       <div v-for="(cell,x) in logicBoard[y]" :key="x"
            class="GameBoardCell"
            @click="handleCellClick(y,x)"
-      >
+           :style="{color:cell==='X'?'red':'blue'}">
+        {{cell}}
       </div>
     </div>
     </div>
@@ -93,13 +110,18 @@ const LeaderBoardDataAmount=computed(()=>{
   flex-direction: row;
 }
 .GameBoardCell{
+  display: flex;
   min-width: 30px;
   min-height:30px;
   border-radius:10px;
   margin: 1px;
   background-color: white;
+  align-items: center;
+  justify-content: center;
+  color: #181818;
+  cursor: pointer;
+  caret-color: transparent;
 }
-
 .Setting{
   width: 30%;
   display: grid;
@@ -109,5 +131,4 @@ const LeaderBoardDataAmount=computed(()=>{
   margin: 20px;
   background-color: gray;
 }
-
 </style>
